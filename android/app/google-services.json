@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "83902894187",
+    "project_id": "practice202306b",
+    "storage_bucket": "practice202306b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:83902894187:android:d1bfbce1ead55d035c612e",
+        "android_client_info": {
+          "package_name": "com.aptech.demo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNyOLrVKck14qy9Pa5NxqSwjm6EF3DFVU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
