@@ -20,6 +20,8 @@ class _SignupScreenState extends State<SignupScreen> {
 
   bool isPasswordVisible = false;
 
+
+
  Future<void> userSignUp(String email, String password) async {
   try {
     await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -81,6 +83,12 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 }
 
+
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,6 +100,8 @@ class _SignupScreenState extends State<SignupScreen> {
         centerTitle: true,
         backgroundColor: Colors.teal,
       ),
+
+      
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),

@@ -72,7 +72,7 @@ class _ResetScreenState extends State<ResetScreen> {
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.blue,
       ),
        body: Center(
         child: SingleChildScrollView(

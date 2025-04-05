@@ -1,3 +1,4 @@
+import 'package:demo15/Home.dart';
 import 'package:demo15/Screens/Reset.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
     // Assuming LoginScreen is defined elsewhere.
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => ResetScreen()),
+      MaterialPageRoute(builder: (context) => home()),
     );
   } on FirebaseAuthException catch (e) {
     String errorMessage = 'An error occurred during login.';
