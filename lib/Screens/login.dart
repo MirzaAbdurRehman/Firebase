@@ -2,6 +2,7 @@ import 'package:demo15/Home.dart';
 import 'package:demo15/Screens/Reset.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -26,6 +27,14 @@ class _LoginScreenState extends State<LoginScreen> {
       email: email,
       password: password,
     );
+
+     // Using Shared Preferences
+
+     SharedPreferences userCredential = await SharedPreferences.getInstance();
+     var userEmail = userCredential.setString('email', emailController.text.toString());
+     debugPrint('user EMAIL: $userEmail');
+
+
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text(
