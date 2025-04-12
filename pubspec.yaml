@@ -38,6 +38,8 @@ dependencies:
   carousel_slider: 
   firebase_core:
   firebase_auth:
+  cloud_firestore: 
+  uuid: 
   google_generative_ai:
   lottie: 
   shared_preferences: 

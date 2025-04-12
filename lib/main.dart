@@ -1,3 +1,4 @@
+import 'package:demo15/AdminScreens/createData.dart';
 import 'package:demo15/Home.dart';
 import 'package:demo15/Screens/Signup.dart';
 import 'package:demo15/Screens/Splash.dart';
@@ -44,7 +45,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: LoginScreen(),
+      home: creaDataAdmin(),
     );
   }
 }
