@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:demo15/AdminScreens/createData.dart';
 import 'package:demo15/Screens/Products.dart';
 import 'package:demo15/Screens/Reset.dart';
 import 'package:demo15/Screens/chatScreen.dart';
@@ -128,9 +129,9 @@ class _homeState extends State<home> {
 
                 ListTile(
                 leading: Icon(Icons.logout),
-                title: Text('Product Screen'),
+                title: Text('Product Add Screen'),
                 onTap: (){
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ProductScreen() ));
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => creaDataAdmin() ));
                 },
                 ),
           ],

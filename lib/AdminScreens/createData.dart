@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:demo15/AdminScreens/Fetch_Data_Screen.dart';
 import 'package:demo15/Home.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +50,7 @@ class _creaDataAdminState extends State<creaDataAdmin> {
         ),
       );
 
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => home()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Clotrhing_Fetch_Screen()));
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -154,7 +155,10 @@ class _creaDataAdminState extends State<creaDataAdmin> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 30.0),
                       child: ElevatedButton(
-                        onPressed: ProductAddInfo,
+                        onPressed: (){
+                          ProductAddInfo();
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => Clotrhing_Fetch_Screen()));
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.black,
                           padding: const EdgeInsets.symmetric(vertical: 16.0),
