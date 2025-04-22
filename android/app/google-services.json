@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "83902894187",
-    "project_id": "practice202306b",
-    "storage_bucket": "practice202306b.firebasestorage.app"
+    "project_number": "706675914030",
+    "project_id": "citiguid-8c345",
+    "storage_bucket": "citiguid-8c345.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:83902894187:android:d1bfbce1ead55d035c612e",
+        "mobilesdk_app_id": "1:706675914030:android:00838dfcdf361f47dd76bf",
         "android_client_info": {
-          "package_name": "com.aptech.demo"
+          "package_name": "com.example.city_guide"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDNyOLrVKck14qy9Pa5NxqSwjm6EF3DFVU"
+          "current_key": "AIzaSyD9UeqhWeIc-yEsSQ2qY64L9LbbHLvMTw8"
         }
       ],
       "services": {

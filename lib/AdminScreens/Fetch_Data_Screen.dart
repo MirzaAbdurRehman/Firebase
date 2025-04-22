@@ -45,6 +45,14 @@ class _Clotrhing_Fetch_ScreenState extends State<Clotrhing_Fetch_Screen> {
                         var productPrice  = snapshot.data!.docs[index]['productPrice'];
                         var productInfo = snapshot.data!.docs[index]['productInfo'];
                         var productDescription  = snapshot.data!.docs[index]['productDescription'];
+                        var productImage = snapshot.data!.docs[index]['img'];
+
+                         // For accessing particular id  in firestore datbase
+
+                        var data_id = snapshot.data!.docs[index].id;
+
+
+                        print(productImage);
                          
                         return Padding(
                           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
@@ -59,6 +67,20 @@ class _Clotrhing_Fetch_ScreenState extends State<Clotrhing_Fetch_Screen> {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Product Image
+            Image.network(
+  productImage,
+  fit: BoxFit.cover,
+  loadingBuilder: (context, child, loadingProgress) {
+    if (loadingProgress == null) return child;
+    return Center(
+      child: CircularProgressIndicator(),
+    );
+  },
+  errorBuilder: (context, error, stackTrace) {
+    return Icon(Icons.broken_image, color: Colors.grey, size: 50);
+  },
+),
         Text(
           'Product Name',
           style: TextStyle(
@@ -135,6 +157,29 @@ class _Clotrhing_Fetch_ScreenState extends State<Clotrhing_Fetch_Screen> {
             height: 1.4,
           ),
         ),
+         Column(
+                                        children: [
+                                          // IconButton(onPressed: (){
+                                          //   Navigator.push(context, MaterialPageRoute(builder: (context) => update_clothing(
+                                          //     Productname1: ProductName,
+                                          //     id1: data_id,
+                                          //     ProductPrice1: ProductPrie,
+                                          //     ProductInfo1: ProductInfo,
+                                          //     img1: ProductImage,
+                                          //     ProductDescription1: ProductDescription,
+                                          //   ),));
+                                          // }, icon: Icon(Icons.edit,color: Colors.blue,)),
+                                          Padding(
+                                            padding: const EdgeInsets.only(top: 10.0),
+                                            child: IconButton(
+                                              onPressed: (){
+                                              FirebaseFirestore.instance.collection('ClothingData').doc(data_id).delete();
+                                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                                                content: Text( "Delete Successfully")));
+                                            }, icon: Icon(Icons.delete,color: Colors.red,)),
+                                          ),
+                                        ],
+                                      ),
       ],
     ),
   ),

@@ -16,13 +16,13 @@ void main() async {
   if(kIsWeb){
     await Firebase.initializeApp(
       options: const FirebaseOptions(
-         apiKey: "AIzaSyDmHx7gsqi9ajMaO21CQRi-_EWKnbi1-kk",
-         authDomain: "practice202306b.firebaseapp.com",
-         projectId: "practice202306b",
-         storageBucket: "practice202306b.firebasestorage.app",
-         messagingSenderId: "83902894187",
-         appId: "1:83902894187:web:1dcce42e72a36bb95c612e",
-         measurementId: "G-DDW195W8L8"
+      apiKey: "AIzaSyDisMRDdTt5sQfhv2BzUKtTF3zVLVsRm_k",
+      authDomain: "citiguid-8c345.firebaseapp.com",
+      projectId: "citiguid-8c345",
+      storageBucket: "citiguid-8c345.appspot.com",
+      messagingSenderId: "706675914030",
+      appId: "1:706675914030:web:6363f83f355fc348dd76bf",
+      measurementId: "G-JDLWPEV0YQ"
       )
     );
   }else{
@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: SplashScreen(),
+      home: Clotrhing_Fetch_Screen(),
     );
   }
 }

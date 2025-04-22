@@ -1,9 +1,14 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo15/AdminScreens/Fetch_Data_Screen.dart';
 import 'package:demo15/Home.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
 class creaDataAdmin extends StatefulWidget {
@@ -20,15 +25,58 @@ class _creaDataAdminState extends State<creaDataAdmin> {
   final TextEditingController productDescriptionController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+
+  File? pImage;
+  Uint8List? webImg;
   bool isLoading = false;
 
-  void ProductAddInfo() async {
+  Future<void> productImage() async {
     if (!_formKey.currentState!.validate()) return;
+
+    if ((kIsWeb && webImg == null) || (!kIsWeb && pImage == null)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Please select an image")),
+      );
+      return;
+    }
 
     setState(() {
       isLoading = true;
     });
 
+    try {
+      String getImageUrl = '';
+      if (kIsWeb) {
+        UploadTask uploadTask = FirebaseStorage.instance
+            .ref()
+            .child('Product_Clothing_Images')
+            .child(Uuid().v4())
+            .putData(webImg!);
+        TaskSnapshot taskSnapshot = await uploadTask;
+        getImageUrl = await taskSnapshot.ref.getDownloadURL();
+      } else {
+        UploadTask uploadTask = FirebaseStorage.instance
+            .ref()
+            .child('ProductClothingImage')
+            .child(Uuid().v4())
+            .putFile(pImage!);
+        TaskSnapshot taskSnapshot = await uploadTask;
+        getImageUrl = await taskSnapshot.ref.getDownloadURL();
+      }
+
+      await ProductAddInfo(getImageUrl);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Image Upload Error: $e"), backgroundColor: Colors.red),
+      );
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> ProductAddInfo(String imageUrl) async {
     final String uid = Uuid().v1();
 
     Map<String, dynamic> data = {
@@ -37,6 +85,7 @@ class _creaDataAdminState extends State<creaDataAdmin> {
       'productInfo': productInfoController.text.trim(),
       'productDescription': productDescriptionController.text.trim(),
       'id': uid,
+      'img': imageUrl,
     };
 
     try {
@@ -50,7 +99,10 @@ class _creaDataAdminState extends State<creaDataAdmin> {
         ),
       );
 
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Clotrhing_Fetch_Screen()));
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Clotrhing_Fetch_Screen()),
+      );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -58,14 +110,8 @@ class _creaDataAdminState extends State<creaDataAdmin> {
           backgroundColor: Colors.red,
         ),
       );
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
     }
   }
-
-
 
   Widget customTextField({
     required String label,
@@ -95,10 +141,6 @@ class _creaDataAdminState extends State<creaDataAdmin> {
     );
   }
 
-
-
-  
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -115,6 +157,39 @@ class _creaDataAdminState extends State<creaDataAdmin> {
                 key: _formKey,
                 child: Column(
                   children: [
+                    SizedBox(height: 10),
+                    GestureDetector(
+                      onTap: () async {
+                        if (kIsWeb) {
+                          XFile? pickImage = await ImagePicker().pickImage(source: ImageSource.gallery);
+                          if (pickImage != null) {
+                            var convertedFile = await pickImage.readAsBytes();
+                            setState(() {
+                              webImg = convertedFile;
+                            });
+                          }
+                        } else {
+                          XFile? pickImage = await ImagePicker().pickImage(source: ImageSource.gallery);
+                          if (pickImage != null) {
+                            File convertedFile = File(pickImage.path);
+                            setState(() {
+                              pImage = convertedFile;
+                            });
+                          }
+                        }
+                      },
+                      child: kIsWeb
+                          ? CircleAvatar(
+                              radius: 65,
+                              backgroundImage: webImg != null ? MemoryImage(webImg!) : null,
+                              backgroundColor: Colors.green.shade100,
+                            )
+                          : CircleAvatar(
+                              radius: 65,
+                              backgroundImage: pImage != null ? FileImage(pImage!) : null,
+                            ),
+                    ),
+                    SizedBox(height: 10),
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 15),
                       child: Text(
@@ -123,7 +198,6 @@ class _creaDataAdminState extends State<creaDataAdmin> {
                       ),
                     ),
                     const SizedBox(height: 20),
-
                     customTextField(
                       label: 'Product Name',
                       icon: Icons.label,
@@ -150,14 +224,12 @@ class _creaDataAdminState extends State<creaDataAdmin> {
                       controller: productDescriptionController,
                       errorText: 'Please enter Product Description',
                     ),
-
                     const SizedBox(height: 20),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 30.0),
                       child: ElevatedButton(
-                        onPressed: (){
-                          ProductAddInfo();
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => Clotrhing_Fetch_Screen()));
+                        onPressed: () async {
+                          await productImage(); // Now handles upload + navigation
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.black,

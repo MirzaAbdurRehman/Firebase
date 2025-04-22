@@ -15,8 +15,6 @@ class _ProductScreenState extends State<ProductScreen> {
     super.initState();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
