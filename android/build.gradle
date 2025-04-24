@@ -28,20 +28,21 @@ subprojects {
 }
 
 // Ensure Java compatibility and optimize builds
-subprojects {
-    afterEvaluate { project ->
-        if (project.hasProperty("android")) {
-            android {
-                compileSdkVersion 34
+// gradle.projectsEvaluated {
+//     subprojects { project ->
+//         if (project.hasProperty("android")) {
+//             project.android {
+//                 compileSdkVersion 34
 
-                compileOptions {
-                    sourceCompatibility JavaVersion.VERSION_17
-                    targetCompatibility JavaVersion.VERSION_17
-                }
-            }
-        }
-    }
-}
+//                 compileOptions {
+//                     sourceCompatibility JavaVersion.VERSION_17
+//                     targetCompatibility JavaVersion.VERSION_17
+//                 }
+//             }
+//         }
+//     }
+// }
+
 
 // Clean task for Gradle
 tasks.register("clean", Delete) {

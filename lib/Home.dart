@@ -91,7 +91,7 @@ class _homeState extends State<home> {
             Container(
             
               height: MediaQuery.of(context).size.height * 0.15,
-              child: DrawerHeader(
+              child: const DrawerHeader(
                 decoration: BoxDecoration(
                   color: Colors.blue
                 ),
@@ -100,7 +100,7 @@ class _homeState extends State<home> {
             ),
               ListTile(
                 leading: Icon(Icons.home),
-                title: Text('Home Page'),
+                title: const Text('Home Page'),
                 onTap: (){
                   Navigator.push(context, MaterialPageRoute(builder: (context) => home() ));
                 },
@@ -128,8 +128,8 @@ class _homeState extends State<home> {
                 ),
 
                 ListTile(
-                leading: Icon(Icons.logout),
-                title: Text('Product Add Screen'),
+                leading: const Icon(Icons.logout),
+                title: const Text('Product Add Screen'),
                 onTap: (){
                   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => creaDataAdmin() ));
                 },
@@ -275,4 +275,4 @@ floatingActionButton: FloatingActionButton(onPressed: (){
 
     );
   }
-}
+}                                                                                                                                             

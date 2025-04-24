@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:demo15/AdminScreens/updateData.dart';
 import 'package:flutter/material.dart';
 
 class Clotrhing_Fetch_Screen extends StatefulWidget {
@@ -159,24 +160,30 @@ class _Clotrhing_Fetch_ScreenState extends State<Clotrhing_Fetch_Screen> {
         ),
          Column(
                                         children: [
-                                          // IconButton(onPressed: (){
-                                          //   Navigator.push(context, MaterialPageRoute(builder: (context) => update_clothing(
-                                          //     Productname1: ProductName,
-                                          //     id1: data_id,
-                                          //     ProductPrice1: ProductPrie,
-                                          //     ProductInfo1: ProductInfo,
-                                          //     img1: ProductImage,
-                                          //     ProductDescription1: ProductDescription,
-                                          //   ),));
-                                          // }, icon: Icon(Icons.edit,color: Colors.blue,)),
-                                          Padding(
-                                            padding: const EdgeInsets.only(top: 10.0),
-                                            child: IconButton(
-                                              onPressed: (){
-                                              FirebaseFirestore.instance.collection('ClothingData').doc(data_id).delete();
-                                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                                                content: Text( "Delete Successfully")));
-                                            }, icon: Icon(Icons.delete,color: Colors.red,)),
+                                  
+                                          Row(
+                                            children: [
+                                                  IconButton(onPressed: (){ 
+                                                    Navigator.push(context, MaterialPageRoute(builder: (context) => update_clothing(
+                                          Productname1: productName,
+                                          ProductPrice1: productPrice,
+                                          ProductInfo1: productInfo,
+                                          ProductDescription1: productDescription,
+                                          img1: productImage,
+                                          id1: data_id,
+                                                    )));
+                                                  },
+                                                   icon: Icon(Icons.edit,color: Colors.blue,)),
+                                              Padding(
+                                                padding: const EdgeInsets.only(top: 10.0),
+                                                child: IconButton(
+                                                  onPressed: (){
+                                                  FirebaseFirestore.instance.collection('ClothingData').doc(data_id).delete();
+                                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                                                    content: Text( "Delete Successfully")));
+                                                }, icon: Icon(Icons.delete,color: Colors.red,)),
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ),

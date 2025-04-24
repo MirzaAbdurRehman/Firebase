@@ -30,51 +30,56 @@ class _creaDataAdminState extends State<creaDataAdmin> {
   Uint8List? webImg;
   bool isLoading = false;
 
-  Future<void> productImage() async {
-    if (!_formKey.currentState!.validate()) return;
+Future<void> productImage() async {
+  if (!_formKey.currentState!.validate()) return;
 
-    if ((kIsWeb && webImg == null) || (!kIsWeb && pImage == null)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Please select an image")),
-      );
-      return;
-    }
-
-    setState(() {
-      isLoading = true;
-    });
-
-    try {
-      String getImageUrl = '';
-      if (kIsWeb) {
-        UploadTask uploadTask = FirebaseStorage.instance
-            .ref()
-            .child('Product_Clothing_Images')
-            .child(Uuid().v4())
-            .putData(webImg!);
-        TaskSnapshot taskSnapshot = await uploadTask;
-        getImageUrl = await taskSnapshot.ref.getDownloadURL();
-      } else {
-        UploadTask uploadTask = FirebaseStorage.instance
-            .ref()
-            .child('ProductClothingImage')
-            .child(Uuid().v4())
-            .putFile(pImage!);
-        TaskSnapshot taskSnapshot = await uploadTask;
-        getImageUrl = await taskSnapshot.ref.getDownloadURL();
-      }
-
-      await ProductAddInfo(getImageUrl);
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Image Upload Error: $e"), backgroundColor: Colors.red),
-      );
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
+  if ((kIsWeb && webImg == null) || (!kIsWeb && pImage == null)) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Please select an image")),
+    );
+    return;
   }
+
+  setState(() {
+    isLoading = true;
+  });
+
+  try {
+    String getImageUrl = '';
+    if (kIsWeb) {
+      UploadTask uploadTask = FirebaseStorage.instance
+          .ref()
+          .child('Product_Clothing_Images')
+          .child(Uuid().v4())
+          .putData(
+            webImg!,SettableMetadata(contentType: 'image/jpeg'), // 👈 added this line
+          );
+      TaskSnapshot taskSnapshot = await uploadTask;
+      getImageUrl = await taskSnapshot.ref.getDownloadURL();
+    } else {
+      UploadTask uploadTask = FirebaseStorage.instance
+          .ref()
+          .child('ProductClothingImage')
+          .child(Uuid().v4())
+          .putFile(
+            pImage!,SettableMetadata(contentType: 'image/jpeg'), // 👈 added this line
+          );
+      TaskSnapshot taskSnapshot = await uploadTask;
+      getImageUrl = await taskSnapshot.ref.getDownloadURL();
+    }
+
+    await ProductAddInfo(getImageUrl);
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Image Upload Error: $e"), backgroundColor: Colors.red),
+    );
+  } finally {
+    setState(() {
+      isLoading = false;
+    });
+  }
+}
+
 
   Future<void> ProductAddInfo(String imageUrl) async {
     final String uid = Uuid().v1();
