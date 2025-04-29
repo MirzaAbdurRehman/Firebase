@@ -46,7 +46,7 @@ class _Clotrhing_Fetch_ScreenState extends State<Clotrhing_Fetch_Screen> {
                         var productPrice  = snapshot.data!.docs[index]['productPrice'];
                         var productInfo = snapshot.data!.docs[index]['productInfo'];
                         var productDescription  = snapshot.data!.docs[index]['productDescription'];
-                        var productImage = snapshot.data!.docs[index]['img'];
+                        var productImage = snapshot.data!.docs[index]['image'];
 
                          // For accessing particular id  in firestore datbase
 

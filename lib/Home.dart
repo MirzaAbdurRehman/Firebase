@@ -1,12 +1,16 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo15/AdminScreens/createData.dart';
 import 'package:demo15/Screens/Products.dart';
 import 'package:demo15/Screens/Reset.dart';
 import 'package:demo15/Screens/chatScreen.dart';
 import 'package:demo15/Screens/login.dart';
 import 'package:demo15/Screens/own_services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class home extends StatefulWidget {
    home({super.key});
@@ -16,8 +20,26 @@ class home extends StatefulWidget {
 
 class _homeState extends State<home> {
 
+    String user_id = '';
+
+
+  Future getUser() async {
+        //   Using Shared Prefrenes
+        SharedPreferences userCredential = await SharedPreferences.getInstance();
+        var Uemail = userCredential.getString('email');
+        debugPrint('user Email: $Uemail');
+        return Uemail;
+  }
+
   @override
   void initState() {
+
+      getUser().then((value) {
+      setState(() {
+        user_id = value;
+      });
+      // print('${user_id}');
+    });
     AnalyticsEvents.logScreenView(screenName: 'HomeScreen', ScreenIndex: '1');
     super.initState();
   }
@@ -73,6 +95,19 @@ class _homeState extends State<home> {
         iconTheme: IconThemeData(
           color: Colors.white
         ),
+                leading: Builder(
+          builder: (context) {
+            return IconButton(
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+              icon: Icon(
+                Icons.menu,
+                color: Colors.white,
+              ),
+            );
+          },
+        ),
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -83,60 +118,171 @@ class _homeState extends State<home> {
 
        
 
-       drawer: Drawer(
-        shadowColor: Colors.grey,
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            Container(
-            
-              height: MediaQuery.of(context).size.height * 0.15,
-              child: const DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Colors.blue
-                ),
-                child: Center(child: Text("Profile Page",style: TextStyle(color: Colors.white,fontSize: 24,fontWeight: FontWeight.bold),))
-                ),
-            ),
-              ListTile(
-                leading: Icon(Icons.home),
-                title: const Text('Home Page'),
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => home() ));
-                },
-                ),
-                 ListTile(
-                leading: Icon(Icons.edit),
-                title: Text('Change Password'),
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => ResetScreen() ));
-                },
-                ),
-                 ListTile(
-                leading: Icon(Icons.shopping_bag),
-                title: Text('Your Cart'),
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => ResetScreen() ));
-                },
-                ),
-                  ListTile(
-                leading: Icon(Icons.logout),
-                title: Text('Log Out'),
-                onTap: (){
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen() ));
-                },
-                ),
+     drawer: Drawer(
+        child: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance.collection('usersinfo').where("email", isEqualTo: user_id).snapshots(),
+          builder: (context, snapshot) {
+            if (ConnectionState.waiting == snapshot.connectionState) {
+              return Center(child: CircularProgressIndicator());
+            }
+            if (snapshot.hasError) {
+              return Center(child: Text('Error'));
+            }
+            if (snapshot.hasData) {
+              return ListView.builder(
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (context, index) {
+                  var Name = snapshot.data!.docs[index]['name'];
+                  var Address = snapshot.data!.docs[index]['address'];
+                  var Phone = snapshot.data!.docs[index]['phone'];
+                  String pImage = snapshot.data!.docs[index]['image'];
 
-                ListTile(
-                leading: const Icon(Icons.logout),
-                title: const Text('Product Add Screen'),
-                onTap: (){
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => creaDataAdmin() ));
+                  // For accessing particular id  in firestore datbase
+
+                  var data_id = snapshot.data!.docs[index].id;
+                  return Column(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        height: 80,
+                        child: const DrawerHeader(
+                          decoration: BoxDecoration(
+                            color: Colors.blue,
+                          ),
+                          child: Text(
+                            'User Profile',
+                            style: TextStyle(color: Colors.white, fontSize: 30),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      ClipOval(
+                        child: CachedNetworkImage(
+                          imageUrl: '${snapshot.data!.docs[index]['image']}',
+                          width: 140, // diameter = 2 * radius
+                          height: 140,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => CircularProgressIndicator(),
+                          errorWidget: (context, url, error) => Icon(Icons.error),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      ListTile(
+                        leading: Icon(
+                          Icons.person,
+                          color: Colors.blue,
+                        ),
+                        // leading: Icon(Icons.),
+                        title: Text(
+                          '${snapshot.data!.docs[index]['name']}',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      ListTile(
+                        leading: Icon(
+                          Icons.delivery_dining_outlined,
+                          color: Colors.red[500],
+                        ),
+                        title: Text(
+                          '${snapshot.data!.docs[index]['address']}',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      ListTile(
+                        leading: Icon(
+                          Icons.phone,
+                          color: Colors.green,
+                        ),
+                        title: Text(
+                          '${snapshot.data!.docs[index]['phone']}',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                    
+                      Container(
+                        height: 34,
+                        margin:
+                        EdgeInsets.symmetric(horizontal: 36, vertical: 40),
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          child: Text(
+                            "Logout",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontFamily: 'Metropolis'),
+                          ),
+                          onPressed: () {
+                            FirebaseAuth.instance.signOut();
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => LoginScreen(),
+                                ));
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red[500],
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                        ),
+                      ),
+                      // IconButton(
+                      //     onPressed: () {
+                      //       Navigator.push(
+                      //           context,
+                      //           MaterialPageRoute(
+                      //             builder: (context) => update_current_User(
+                      //                 id1: data_id,
+                      //                 name1: Name,
+                      //                address1: Address,
+                      //                phone_number1: Phone,
+                      //                img1: pImage,
+                      //                payment_method1: Payment,
+                      //             ),
+                      //           ));
+                      //     },
+                      //     icon: Icon(
+                      //       Icons.edit,
+                      //       color: Colors.blue,
+                      //     )),
+                      Text('Update User Profile'),
+                    ],
+                  );
                 },
-                ),
-          ],
+              );
+            }
+            return Center(
+              child: Container(
+                child: Text('There is no Data Found'),
+              ),
+            );
+          },
         ),
-       ) ,
+      ),
 
 
 

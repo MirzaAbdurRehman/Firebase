@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
-
 class update_clothing extends StatefulWidget {
 
   String id1;
@@ -105,8 +104,6 @@ class _update_clothingState extends State<update_clothing> {
     Navigator.pop(context);
   }
 
-
-
   @override
   void dispose() {
     productNameController.dispose();
@@ -122,7 +119,7 @@ class _update_clothingState extends State<update_clothing> {
       appBar: AppBar(
         title: Text('Update Cloth Screen',style: TextStyle(color: Colors.white,fontSize: 30),),
         centerTitle: true,
-        backgroundColor: Colors.orange,
+        backgroundColor: Colors.blue,
         // elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios, color: Colors.white),
@@ -277,7 +274,6 @@ class _update_clothingState extends State<update_clothing> {
                       ),
                     ),
                   ),
-
                   Padding(
                     padding: const EdgeInsets.only(left: 28, right: 28, top: 15),
                     child: Container(
@@ -329,7 +325,7 @@ class _update_clothingState extends State<update_clothing> {
                       height: 60,
                       child: TextFormField(
                         keyboardType: TextInputType.number,
-                        controller: productInfoController,
+                        controller: productDescriptipnController,
                         decoration: InputDecoration(
                           label: Text(
                             'Product Description',
@@ -384,11 +380,10 @@ class _update_clothingState extends State<update_clothing> {
                 onPressed: () {
                   if (_formkey.currentState!.validate()) {
                     productImage();
-                    // Navigator.push(context, MaterialPageRoute(builder: (context) => users_manage(),));
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange,
+                  backgroundColor: Colors.blue,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),

@@ -90,7 +90,7 @@ Future<void> productImage() async {
       'productInfo': productInfoController.text.trim(),
       'productDescription': productDescriptionController.text.trim(),
       'id': uid,
-      'img': imageUrl,
+      'image': imageUrl,
     };
 
     try {
